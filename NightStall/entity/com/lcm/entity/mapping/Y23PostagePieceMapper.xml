@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcm.dao.business.IY23PostagePieceDao">
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23PostagePiece">
+    <id column="id" property="id" />
+    <result column="tempId" property="tempId" />
+    <result column="area" property="area" />
+    <result column="num" property="num" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="modify_time" property="modifyTime" />
+  </resultMap>
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+   <select id="select" resultMap="resultMap">
+  	select a.* from y23_postage_piece a
+  	where a.is_delete=0 
+  	order by create_time desc
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.* from y23_postage_piece a
+  	where a.is_delete=0 
+    and a.id = #{id}
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(1) budget from y23_postage_piece a
+  	where a.is_delete=0 
+  	
+ 	 <if test="tempId != null">
+  	and a.tempId = #{tempId}
+  	</if>
+  	
+  	<if test="sourceType != null">
+  	and a.source_type = #{sourceType}
+  	</if>
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.* from y23_postage_piece a
+  	where a.is_delete=0 
+  	
+  	<if test="tempId != null">
+  	and a.tempId = #{tempId}
+  	</if>
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  	
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.lcm.entity.pojo.Y23PostagePiece">
+    insert into y23_postage_piece
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tempId != null">
+        tempId,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+        is_delete,
+        create_time,
+        modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="tempId != null">
+        #{tempId},
+      </if>
+      <if test="area != null">
+        #{area},
+      </if>
+      <if test="num != null">
+        #{num},
+      </if>
+        0,
+        now(),
+        now()
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23PostagePiece">
+    update y23_postage_piece
+    <set>
+      <if test="tempId != null">
+        tempId = #{tempId},
+      </if>
+      <if test="area != null">
+        area = #{area},
+      </if>
+      <if test="num != null">
+        num = #{num},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

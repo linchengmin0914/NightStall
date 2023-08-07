@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IUserRightDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.UserRight" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+    <result column="contactNum" property="contactNum" jdbcType="INTEGER" />
+    <result column="publishNum" property="publishNum" jdbcType="INTEGER" />
+    <result column="showMathRightNum" property="showMathRightNum" jdbcType="INTEGER" />
+    <result column="smsNum" property="smsNum" jdbcType="INTEGER" />
+    <result column="rightType" property="rightType" jdbcType="INTEGER" />
+    <result column="freeStartTime" property="freeStartTime" jdbcType="TIMESTAMP" />
+    <result column="freeEndTime" property="freeEndTime" jdbcType="TIMESTAMP" />
+    <result column="sourceType" property="sourceType" jdbcType="INTEGER" />
+    <result column="sourceId" property="sourceId" jdbcType="BIGINT" />
+    <result column="isDelete" property="isDelete" jdbcType="BIT" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modifyTime" property="modifyTime" jdbcType="TIMESTAMP" />
+    
+     <result column="storeNum" property="storeNum" jdbcType="INTEGER" />
+     <result column="fanganNum" property="fanganNum" jdbcType="INTEGER" />
+  </resultMap>
+  
+   <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select a.* from t_user_right a
+  	where a.isDelete=0 
+  </select>
+  
+  <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.* from t_user_right a
+  	where a.isDelete=0 
+    and a.id = #{id}
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	<if test="userRight == null">
+  		select a.*,b.username from t_user_right a
+  		left join ClientUser b on a.userId=b.id
+	  	where a.isDelete=0 
+	  	<if test="userId != null">
+	  	and a.userId=#{userId}
+	  	</if>
+	  	<if test="sourceId != null">
+	  	and a.sourceId=#{sourceId}
+	  	</if>
+	  	<if test="sourceType != null">
+	  	and a.sourceType=#{sourceType}
+	  	</if>
+	  	
+	  	<if test="username != null">
+	  	and b.username like '%${username}%'
+	  	</if>
+	  	
+	  	<if test="yjcs != null or yjcs2 != null or yjcs3 != null or yjcs4 != null or yjcs5 != null or yjcs6 != null">
+	  	and 
+	  	<trim prefix="(" suffix=")" suffixOverrides="or" >
+	  		<if test="yjcs != null">
+		  	a.contactNum &lt;= #{yjcs} or
+		  	</if>
+		  	
+		  	<if test="yjcs2 != null">
+		  	a.publishNum &lt;= #{yjcs2} or
+		  	</if>
+		  	
+		  	<if test="yjcs3 != null">
+		  	a.showMathRightNum &lt;= #{yjcs3} or
+		  	</if>
+		  	
+		  	<if test="yjcs4 != null">
+		  	a.smsNum &lt;= #{yjcs4} or
+		  	</if>
+		  	
+		  	<if test="yjcs5 != null">
+		  	a.storeNum &lt;= #{yjcs5} or
+		  	</if>
+		  	
+		  	<if test="yjcs6 != null">
+		  	a.fanganNum &lt;= #{yjcs6} or
+		  	</if>
+	  	</trim>
+	  	</if>
+	  	
+	  	<if test="endTime != null">
+	  	and date_format(a.freeEndTime,'%Y-%m-%d') = #{endTime}
+	  	</if>
+	  	
+	  	
+	 	<if test="orderBy != null">
+	  	order by ${orderBy}
+	  	</if>
+	  	<if test="page != null">
+	  	limit #{page}, #{pageSize}
+	  	</if>
+  	</if>
+  	
+  	<if test="userRight != null">
+  		select a.* from t_user_right a
+  		where a.isDelete=0 
+  		<if test="userId != null">
+	  	and a.userId=#{userId}
+	  	</if>
+	  	
+	  	<if test='rightType == "1"'>
+	  		<if test="time != null">
+	  		and date_format(a.freeStartTime,'%Y-%m-%d %H:%i:%s')&lt;= #{time}
+	  		and date_format(a.freeEndTime,'%Y-%m-%d %H:%i:%s')&gt;= #{time}
+	  		</if>
+	  	</if>
+	  	<if test='rightType == "2"'>
+	  		and a.rightType=2
+	  	</if>
+	  	
+	  	<if test='type == "1"'>
+	  		and contactNum>0
+	  	</if>
+	  	<if test='type == "2"'>
+	  		and publishNum>0
+	  	</if>
+	  	<if test='type == "3"'>
+	  		and showMathRightNum>0
+	  	</if>
+	  	<if test='type == "4"'>
+	  		and smsNum>0
+	  	</if>
+	  	
+	  	order by id asc
+  	</if>
+  	
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+  	select count(1) budget from t_user_right a
+ 	left join ClientUser b on a.userId=b.id
+  	where a.isDelete=0 
+  	<if test="userId != null">
+  	and a.userId=#{userId}
+  	</if>
+  	
+  	<if test="username != null">
+  	and b.username like '%${username}%'
+  	</if>
+  	
+  	<if test="yjcs != null or yjcs2 != null or yjcs3 != null or yjcs4 != null or yjcs5 != null or yjcs6 != null">
+  	and 
+  	<trim prefix="(" suffix=")" suffixOverrides="or" >
+  		<if test="yjcs != null">
+	  	a.contactNum &lt;= #{yjcs} or
+	  	</if>
+	  	
+	  	<if test="yjcs2 != null">
+	  	a.publishNum &lt;= #{yjcs2} or
+	  	</if>
+	  	
+	  	<if test="yjcs3 != null">
+	  	a.showMathRightNum &lt;= #{yjcs3} or
+	  	</if>
+	  	
+	  	<if test="yjcs4 != null">
+	  	a.smsNum &lt;= #{yjcs4} or
+	  	</if>
+	  	
+  	<if test="yjcs5 != null">
+  	a.storeNum &lt;= #{yjcs5} or
+  	</if>
+  	
+  	<if test="yjcs6 != null">
+  	a.fanganNum &lt;= #{yjcs6} or
+  	</if>
+  	</trim>
+  	</if>
+  	
+  	<if test="endTime != null">
+  	and date_format(a.freeEndTime,'%Y-%m-%d') = #{endTime}
+  	</if>
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.UserRight" >
+    insert into t_user_right
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="contactNum != null" >
+        contactNum,
+      </if>
+      <if test="publishNum != null" >
+        publishNum,
+      </if>
+      <if test="showMathRightNum != null" >
+        showMathRightNum,
+      </if>
+      <if test="smsNum != null" >
+        smsNum,
+      </if>
+      <if test="rightType != null" >
+        rightType,
+      </if>
+      <if test="freeStartTime != null" >
+        freeStartTime,
+      </if>
+      <if test="freeEndTime != null" >
+        freeEndTime,
+      </if>
+      <if test="sourceType != null" >
+        sourceType,
+      </if>
+      <if test="sourceId != null" >
+        sourceId,
+      </if>
+      <if test="storeNum != null" >
+        storeNum,
+      </if>
+      <if test="fanganNum != null" >
+        fanganNum,
+      </if>
+      isDelete,
+      createTime,
+      modifyTime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="userId != null" >
+        #{userId},
+      </if>
+      <if test="contactNum != null" >
+        #{contactNum},
+      </if>
+      <if test="publishNum != null" >
+        #{publishNum},
+      </if>
+      <if test="showMathRightNum != null" >
+        #{showMathRightNum},
+      </if>
+      <if test="smsNum != null" >
+        #{smsNum},
+      </if>
+      <if test="rightType != null" >
+        #{rightType},
+      </if>
+      <if test="freeStartTime != null" >
+        #{freeStartTime},
+      </if>
+      <if test="freeEndTime != null" >
+        #{freeEndTime},
+      </if>
+      <if test="sourceType != null" >
+        #{sourceType},
+      </if>
+      <if test="sourceId != null" >
+        #{sourceId},
+      </if>
+      <if test="storeNum != null" >
+        #{storeNum},
+      </if>
+      <if test="fanganNum != null" >
+        #{fanganNum},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.UserRight" >
+    update t_user_right
+    <set >
+      <if test="userId != null" >
+        userId = #{userId},
+      </if>
+      <if test="contactNum != null" >
+        contactNum = #{contactNum},
+      </if>
+      <if test="publishNum != null" >
+        publishNum = #{publishNum},
+      </if>
+      <if test="showMathRightNum != null" >
+        showMathRightNum = #{showMathRightNum},
+      </if>
+      <if test="smsNum != null" >
+        smsNum = #{smsNum},
+      </if>
+      <if test="rightType != null" >
+        rightType = #{rightType},
+      </if>
+      <if test="freeStartTime != null" >
+        freeStartTime = #{freeStartTime},
+      </if>
+      <if test="freeEndTime != null" >
+        freeEndTime = #{freeEndTime},
+      </if>
+      <if test="sourceType != null" >
+        sourceType = #{sourceType},
+      </if>
+      <if test="sourceId != null" >
+        sourceId = #{sourceId},
+      </if>
+      <if test="isDelete != null" >
+        isDelete = #{isDelete},
+      </if>
+      <if test="storeNum != null" >
+        storeNum = #{storeNum},
+      </if>
+      <if test="fanganNum != null" >
+        fanganNum = #{fanganNum},
+      </if>
+      modifyTime = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IY23UserCouponDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23UserCoupon" >
+    <id column="id" property="id" />
+    <result column="userId" property="userId" />
+    <result column="couponId" property="couponId" />
+    <result column="scope" property="scope" />
+    <result column="type" property="type" />
+    <result column="face" property="face" />
+    <result column="name" property="name" />
+    <result column="userequire" property="userequire" />
+    <result column="skunum" property="skunum" />
+    <result column="moreget" property="moreget" />
+    <result column="getstart" property="getstart" />
+    <result column="getend" property="getend" />
+    <result column="validtype" property="validtype" />
+    <result column="validstart" property="validstart" />
+    <result column="validend" property="validend" />
+    <result column="validsnum" property="validsnum" />
+    <result column="validenum" property="validenum" />
+    <result column="summary" property="summary" />
+    <result column="status" property="status" />
+    <result column="isDelete" property="isDelete" />
+    <result column="createTime" property="createTime" />
+    <result column="modifyTime" property="modifyTime"/>
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select * from y23_user_coupon where isDelete=0 
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from y23_user_coupon a where a.isDelete=0
+    <if test="userId != null">
+  	and a.userId = #{userId}
+  	</if>
+  	<if test="couponId != null">
+  	and a.couponId = #{couponId}
+  	</if>
+  	<if test="status != null">
+  	and a.status = #{status}
+  	</if>
+  	<if test="statuses != null">
+  	and a.status in (${statuses})
+  	</if>
+  	<if test="scope != null">
+  	and a.scope = #{scope}
+  	</if>
+    <if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.* from y23_user_coupon a 
+  	where a.isDelete=0
+  	<if test="userId != null">
+  	and a.userId = #{userId}
+  	</if>
+  	<if test="couponId != null">
+  	and a.couponId = #{couponId}
+  	</if>
+  	<if test="status != null">
+  	and a.status = #{status}
+  	</if>
+  	<if test="statuses != null">
+  	and a.status in (${statuses})
+  	</if>
+  	<if test="scope != null">
+  	and a.scope = #{scope}
+  	</if>
+    <if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select 
+    *
+    from y23_user_coupon
+    where  isDelete=0
+    and id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Y23UserCoupon" useGeneratedKeys="true" keyProperty="id">
+    insert into y23_user_coupon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="couponId != null" >
+        couponId,
+      </if>
+      <if test="scope != null" >
+        scope,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="face != null" >
+        face,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="userequire != null" >
+        userequire,
+      </if>
+      <if test="skunum != null" >
+        skunum,
+      </if>
+      <if test="moreget != null" >
+        moreget,
+      </if>
+      <if test="getstart != null" >
+        getstart,
+      </if>
+      <if test="getend != null" >
+        getend,
+      </if>
+      <if test="validtype != null" >
+        validtype,
+      </if>
+      <if test="validstart != null" >
+        validstart,
+      </if>
+      <if test="validend != null" >
+        validend,
+      </if>
+      <if test="validsnum != null" >
+        validsnum,
+      </if>
+      <if test="validenum != null" >
+        validenum,
+      </if>
+      <if test="summary != null" >
+        summary,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      isDelete,
+      createTime,
+      modifyTime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="userId != null" >
+        #{userId},
+      </if>
+      <if test="couponId != null" >
+        #{couponId},
+      </if>
+      <if test="scope != null" >
+        #{scope},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="face != null" >
+        #{face},
+      </if>
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="userequire != null" >
+        #{userequire},
+      </if>
+      <if test="skunum != null" >
+        #{skunum},
+      </if>
+      <if test="moreget != null" >
+        #{moreget},
+      </if>
+      <if test="getstart != null" >
+        #{getstart},
+      </if>
+      <if test="getend != null" >
+        #{getend},
+      </if>
+      <if test="validtype != null" >
+        #{validtype},
+      </if>
+      <if test="validstart != null" >
+        #{validstart},
+      </if>
+      <if test="validend != null" >
+        #{validend},
+      </if>
+      <if test="validsnum != null" >
+        #{validsnum},
+      </if>
+      <if test="validenum != null" >
+        #{validenum},
+      </if>
+      <if test="summary != null" >
+        #{summary},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23UserCoupon" >
+    update y23_user_coupon
+    <set >
+      <if test="userId != null" >
+        userId = #{userId},
+      </if>
+      <if test="couponId != null" >
+        couponId = #{couponId},
+      </if>
+      <if test="scope != null" >
+        scope = #{scope},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="face != null" >
+        face = #{face},
+      </if>
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="userequire != null" >
+        userequire = #{userequire},
+      </if>
+      <if test="skunum != null" >
+        skunum = #{skunum},
+      </if>
+      <if test="moreget != null" >
+        moreget = #{moreget},
+      </if>
+      <if test="getstart != null" >
+        getstart = #{getstart},
+      </if>
+      <if test="getend != null" >
+        getend = #{getend},
+      </if>
+      <if test="validtype != null" >
+        validtype = #{validtype},
+      </if>
+      <if test="validstart != null" >
+        validstart = #{validstart},
+      </if>
+      <if test="validend != null" >
+        validend = #{validend},
+      </if>
+      <if test="validsnum != null" >
+        validsnum = #{validsnum},
+      </if>
+      <if test="validenum != null" >
+        validenum = #{validenum},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="isDelete != null" >
+        isDelete = #{isDelete},
+      </if>
+      modifyTime = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

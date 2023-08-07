@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IY23CategoriesDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23Categories" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="storeId" property="storeId" />
+    <result column="pid" property="pid" jdbcType="BIGINT" />
+    <result column="cate_name" property="cateName" jdbcType="VARCHAR" />
+    <result column="en_cate_name" property="enCateName" jdbcType="VARCHAR" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="pCateName" property="pCateName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select * from y23_categories where is_delete=0 
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from y23_categories a where a.is_delete=0
+    <if test="pid != null">
+  	and a.pid = #{pid}
+  	</if>
+  	<if test="storeId != null">
+  	and a.storeId = #{storeId}
+  	</if>
+    <if test="cateName != null">
+  	and a.cate_name like '%${cateName}%'
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.*,(select b.cate_name from y23_categories b where b.id=a.pid) as pCateName,
+  	 (select c.name from y23_store c where c.id=a.storeId) as storeName
+  	 from y23_categories a 
+  	where a.is_delete=0
+  	<if test="pid != null">
+  	and a.pid = #{pid}
+  	</if>
+  	<if test="storeId != null">
+  	and a.storeId = #{storeId}
+  	</if>
+  	<if test="cateName != null">
+  	and a.cate_name like '%${cateName}%'
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.*,(select b.cate_name from y23_categories b where b.id=a.pid) as pCateName,
+  	 (select c.name from y23_store c where c.id=a.storeId) as storeName
+    from y23_categories a
+    where  a.is_delete=0
+    and a.id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Y23Categories" useGeneratedKeys="true" keyProperty="id">
+    insert into y23_categories
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="storeId != null" >
+        storeId,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="cateName != null" >
+        cate_name,
+      </if>
+      <if test="enCateName != null" >
+        en_cate_name,
+      </if>
+      <if test="cover != null" >
+        cover,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      is_delete,
+      create_time,
+      modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="storeId != null" >
+        #{storeId},
+      </if>
+      <if test="pid != null" >
+        #{pid},
+      </if>
+      <if test="cateName != null" >
+        #{cateName},
+      </if>
+      <if test="enCateName != null" >
+        #{enCateName},
+      </if>
+      <if test="cover != null" >
+        #{cover},
+      </if>
+      <if test="sort != null" >
+        #{sort},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23Categories" >
+    update y23_categories
+    <set >
+      <if test="pid != null" >
+        pid = #{pid},
+      </if>
+      <if test="storeId != null" >
+        storeId = #{storeId},
+      </if>
+      <if test="cateName != null" >
+        cate_name = #{cateName},
+      </if>
+      <if test="enCateName != null" >
+        en_cate_name = #{enCateName},
+      </if>
+      <if test="cover != null" >
+        cover = #{cover},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete},
+      </if>
+      modify_time = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcm.dao.business.IY23UserCommentDao">
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23UserComment">
+    <id column="id" property="id" />
+    <result column="orderId" property="orderId" />
+    <result column="userId" property="userId" />
+    <result column="goodsId" property="goodsId" />
+    <result column="storeId" property="storeId" />
+    <result column="content" property="content" />
+    <result column="overall" property="overall" />
+    <result column="storeScore" property="storeScore" />
+    <result column="delivScore" property="delivScore" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="modify_time" property="modifyTime" />
+    
+    <result column="goods_name" property="goodsName" />
+    <result column="orderno" property="orderno" />
+    <result column="userCover" property="userCover" />
+    <result column="nickName" property="nickName" />
+    
+  </resultMap>
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+   <select id="select" resultMap="resultMap">
+  	select a.* from y23_user_comment a
+  	where a.is_delete=0 
+  	order by create_time desc
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.*,b.goods_name as goods_name,c.orderno as orderno from y23_user_comment a
+    left join y23_goods b on a.goodsId=b.id
+    left join y23_user_orders c on a.orderId=c.id
+  	where a.is_delete=0 
+    and a.id = #{id}
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(1) budget from y23_user_comment a
+    left join y23_goods b on a.goodsId=b.id
+    left join y23_user_orders c on a.orderId=c.id
+    left join y23_user d on a.userId=d.id
+  	where a.is_delete=0 
+  	
+  	<if test="key != null">
+  	and (a.content like '%${key}%' or b.goods_name like '%${key}%' or c.orderno like '%${key}%') 
+  	</if>
+  	
+  	<if test="storeId != null">
+  	and a.storeId = #{storeId}
+  	</if>
+  	
+  	<if test="orderId != null">
+  	and a.orderId = #{orderId}
+  	</if>
+  	
+  	<if test="userId != null">
+  	and a.userId = #{userId}
+  	</if>
+  	
+  	<if test="goodsId != null">
+  	and a.goodsId = #{goodsId}
+  	</if>
+  	
+  	<if test="storeId != null">
+  	and a.storeId = #{storeId}
+  	</if>
+  	
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.*,b.goods_name as goods_name,c.orderno as orderno,
+  	 d.nickName as nickName,d.cover as userCover
+  	 from y23_user_comment a
+  	left join y23_goods b on a.goodsId=b.id
+    left join y23_user_orders c on a.orderId=c.id
+    left join y23_user d on a.userId=d.id
+  	where a.is_delete=0 
+  	
+  	<if test="key != null">
+  	and (a.content like '%${key}%' or b.goods_name like '%${key}%' or c.orderno like '%${key}%') 
+  	</if>
+  	
+  	<if test="storeId != null">
+  	and a.storeId = #{storeId}
+  	</if>
+  	
+  	<if test="orderId != null">
+  	and a.orderId = #{orderId}
+  	</if>
+  	
+  	<if test="userId != null">
+  	and a.userId = #{userId}
+  	</if>
+  	
+  	<if test="goodsId != null">
+  	and a.goodsId = #{goodsId}
+  	</if>
+  	
+  	<if test="storeId != null">
+  	and a.storeId = #{storeId}
+  	</if>
+  	
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  	
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.lcm.entity.pojo.Y23UserComment">
+    insert into y23_user_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderId != null">
+        orderId,
+      </if>
+      <if test="userId != null">
+        userId,
+      </if>
+      <if test="goodsId != null">
+        goodsId,
+      </if>
+      <if test="storeId != null">
+        storeId,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="overall != null">
+        overall,
+      </if>
+      <if test="storeScore != null">
+        storeScore,
+      </if>
+      <if test="delivScore != null">
+        delivScore,
+      </if>
+        is_delete,
+        create_time,
+        modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="orderId != null">
+        #{orderId},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId},
+      </if>
+      <if test="storeId != null">
+        #{storeId},
+      </if>
+      <if test="content != null">
+        #{content},
+      </if>
+      <if test="overall != null">
+        #{overall},
+      </if>
+      <if test="storeScore != null">
+        #{storeScore},
+      </if>
+      <if test="delivScore != null">
+        #{delivScore},
+      </if>
+        0,
+        now(),
+        now()
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23UserComment">
+    update y23_user_comment
+    <set>
+      <if test="orderId != null">
+        orderId = #{orderId},
+      </if>
+      <if test="userId != null">
+        userId = #{userId},
+      </if>
+      <if test="goodsId != null">
+        goodsId = #{goodsId},
+      </if>
+      <if test="storeId != null">
+        storeId = #{storeId},
+      </if>
+      <if test="content != null">
+        content = #{content},
+      </if>
+      <if test="overall != null">
+        overall = #{overall},
+      </if>
+      <if test="storeScore != null">
+        storeScore = #{storeScore},
+      </if>
+      <if test="delivScore != null">
+        delivScore = #{delivScore},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

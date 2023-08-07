@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IY23StoreDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23Store" >
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+    <result column="cover" property="cover" />
+    <result column="phone" property="phone" />
+    <result column="summary" property="summary" />
+    <result column="address" property="address" />
+    <result column="opentime" property="opentime" />
+    <result column="status" property="status" />
+    <result column="latitude" property="latitude" />
+    <result column="longitude" property="longitude" />
+    <result column="msaleNum" property="msaleNum" />
+    <result column="overall" property="overall" />
+    <result column="distanceFormat" property="distanceFormat" />
+    <result column="minDeliveryPrice" property="minDeliveryPrice" />
+    <result column="deliveryTime" property="deliveryTime" />
+    <result column="isDelete" property="isDelete" />
+    <result column="createTime" property="createTime" />
+    <result column="modifyTime" property="modifyTime"/>
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select * from y23_store where isDelete=0 
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from y23_store a where a.isDelete=0
+    <if test="status != null">
+  	and a.status = #{status}
+  	</if>
+    <if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.* from y23_store a 
+  	where a.isDelete=0
+  	<if test="status != null">
+  	and a.status = #{status}
+  	</if>
+    <if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select 
+    *
+    from y23_store
+    where  isDelete=0
+    and id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Y23Store" useGeneratedKeys="true" keyProperty="id">
+    insert into y23_store
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="cover != null" >
+        cover,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="summary != null" >
+        summary,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="opentime != null" >
+        opentime,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="minDeliveryPrice != null" >
+        minDeliveryPrice,
+      </if>
+      <if test="deliveryTime != null" >
+        deliveryTime,
+      </if>
+      <if test="msaleNum != null" >
+        msaleNum,
+      </if>
+      <if test="overall != null" >
+        overall,
+      </if>
+      <if test="distanceFormat != null" >
+        distanceFormat,
+      </if>
+      isDelete,
+      createTime,
+      modifyTime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="cover != null" >
+        #{cover},
+      </if>
+      <if test="phone != null" >
+        #{phone},
+      </if>
+      <if test="summary != null" >
+        #{summary},
+      </if>
+      <if test="address != null" >
+        #{address},
+      </if>
+      <if test="opentime != null" >
+        #{opentime},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="latitude != null" >
+        #{latitude},
+      </if>
+      <if test="longitude != null" >
+        #{longitude},
+      </if>
+      <if test="minDeliveryPrice != null" >
+        #{minDeliveryPrice},
+      </if>
+      <if test="deliveryTime != null" >
+        #{deliveryTime},
+      </if>
+      <if test="msaleNum != null" >
+        #{msaleNum},
+      </if>
+      <if test="overall != null" >
+        #{overall},
+      </if>
+      <if test="distanceFormat != null" >
+        #{distanceFormat},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23Store" >
+    update y23_store
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="cover != null" >
+        cover = #{cover},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary},
+      </if>
+      <if test="address != null" >
+        address = #{address},
+      </if>
+      <if test="opentime != null" >
+        opentime = #{opentime},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude},
+      </if>
+      <if test="minDeliveryPrice != null" >
+        minDeliveryPrice = #{minDeliveryPrice},
+      </if>
+      <if test="deliveryTime != null" >
+        deliveryTime = #{deliveryTime},
+      </if>
+      <if test="msaleNum != null" >
+        msaleNum = #{msaleNum},
+      </if>
+      <if test="overall != null" >
+        overall = #{overall},
+      </if>
+      <if test="distanceFormat != null" >
+        distanceFormat = #{distanceFormat},
+      </if>
+      <if test="isDelete != null" >
+        isDelete = #{isDelete},
+      </if>
+      modifyTime = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

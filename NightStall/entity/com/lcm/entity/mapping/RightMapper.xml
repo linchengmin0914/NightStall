@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IRightDao" >
+  <resultMap id="RightMap" type="com.lcm.entity.pojo.Right" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="des" property="des" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentId" jdbcType="BIGINT" />
+    <result column="isDelete" property="isDelete" jdbcType="BIT" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modifyTime" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+    <result column="ico" property="ico" jdbcType="VARCHAR" />
+     <result column="sort" property="sort" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from t_right a where a.isDelete=0
+    <if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  	<if test="parentId != null">
+ 		<choose>
+        <when test="parentId == 'parentId'">
+         and a.parentId is null
+        </when>
+        <otherwise>
+         and a.parentId = #{parentId}
+         </otherwise>
+        </choose>
+  	</if>
+  </select>
+  
+   <select id="select" resultMap="RightMap">
+  	select a.*,b.name  parentName  from t_right a 
+  		left join t_right b 
+  		on a.isDelete=0 and a.parentId=b.id
+  	order by sort asc
+  </select>
+  
+  <select id="selectParam" resultMap="RightMap">
+  	select a.*,b.name  parentName  from t_right a 
+  		left join t_right b 
+  		on a.isDelete=0 and a.parentId=b.id
+  	where 1= 1
+  	
+  	<if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  	<if test="parentId != null">
+ 		<choose>
+        <when test="parentId == 'parentId'">
+         and a.parentId is null
+        </when>
+        <otherwise>
+         and a.parentId = #{parentId}
+         </otherwise>
+        </choose>
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+  
+   <select id="selectPk" resultMap="RightMap" parameterType="java.lang.Long" >
+    select 
+    *
+    from t_right
+    where  isDelete=0
+    and id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Right" >
+    insert into t_right
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="des != null" >
+        des,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      parentId,
+      isDelete,
+      createTime,
+       modifyTime,
+       <if test="sort != null" >
+       sort,
+       </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="des != null" >
+        #{des},
+      </if>
+      <if test="url != null" >
+        #{url},
+      </if>
+      #{parentId},
+      0,
+      now(),
+      now(),
+      <if test="sort != null" >
+        #{sort},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.lcm.entity.pojo.Right" >
+    update t_right
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="des != null" >
+        des = #{des},
+      </if>
+       <if test="url != null" >
+        url = #{url},
+      </if>
+      parentId = #{parentId},
+      <if test="isDelete != null" >
+        isDelete = #{isDelete},
+      </if>
+       <if test="sort != null" >
+        sort = #{sort},
+      </if>
+       modifyTime = now()
+    </set>
+    where id = #{id}
+  </update>
+  
+</mapper>

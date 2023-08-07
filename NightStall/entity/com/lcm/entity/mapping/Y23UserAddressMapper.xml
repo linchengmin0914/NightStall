@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcm.dao.business.IY23UserAddressDao">
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23UserAddress">
+    <id column="id" property="id" />
+    <result column="userId" property="userId" />
+    <result column="name" property="name" />
+    <result column="phone" property="phone" />
+    <result column="area" property="area" />
+    <result column="address" property="address" />
+    <result column="isDefault" property="isDefault" />
+    <result column="latitude" property="latitude" />
+    <result column="longitude" property="longitude" />
+    <result column="houseno" property="houseno" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="modify_time" property="modifyTime" />
+  </resultMap>
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+   <select id="select" resultMap="resultMap">
+  	select a.* from y23_user_address a
+  	where a.is_delete=0 
+  	order by create_time desc
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.* from y23_user_address a
+  	where a.is_delete=0 
+    and a.id = #{id}
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(1) budget from y23_user_address a
+  	where a.is_delete=0 
+  	
+  	<if test="userId != null">
+  	and a.userId = #{userId}
+  	</if>
+  	
+  	<if test="isDefault != null">
+  	and a.isDefault = #{isDefault}
+  	</if>
+  	
+  	<if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  	
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.* from y23_user_address a
+  	where a.is_delete=0 
+  	
+  	<if test="userId != null">
+  	and a.userId = #{userId}
+  	</if>
+  	
+  	<if test="isDefault != null">
+  	and a.isDefault = #{isDefault}
+  	</if>
+  	
+  	<if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  	
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  	
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.lcm.entity.pojo.Y23UserAddress">
+    insert into y23_user_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null">
+        userId,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="isDefault != null">
+        isDefault,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="houseno != null">
+        houseno,
+      </if>
+        is_delete,
+        create_time,
+        modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="phone != null">
+        #{phone},
+      </if>
+      <if test="area != null">
+        #{area},
+      </if>
+      <if test="address != null">
+        #{address},
+      </if>
+      <if test="isDefault != null">
+        #{isDefault},
+      </if>
+      <if test="latitude != null">
+        #{latitude},
+      </if>
+      <if test="longitude != null">
+        #{longitude},
+      </if>
+      <if test="houseno != null">
+        #{houseno},
+      </if>
+        0,
+        now(),
+        now()
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23UserAddress">
+    update y23_user_address
+    <set>
+      <if test="userId != null">
+        userId = #{userId},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="phone != null">
+        phone = #{phone},
+      </if>
+      <if test="area != null">
+        area = #{area},
+      </if>
+      <if test="address != null">
+        address = #{address},
+      </if>
+      <if test="isDefault != null">
+        isDefault = #{isDefault},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude},
+      </if>
+      <if test="houseno != null">
+        houseno = #{houseno},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcm.dao.business.IY23UserDao">
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23User">
+    <id column="id" property="id" />
+    <result column="username" property="username" />
+    <result column="pwd" property="pwd" />
+    <result column="name" property="name" />
+    <result column="cover" property="cover" />
+    <result column="nickName" property="nickName" />
+    <result column="phone" property="phone" />
+    <result column="openId" property="openId" />
+    <result column="fxname" property="fxname" />
+    <result column="fxphone" property="fxphone" />
+    <result column="status" property="status" />
+    <result column="refereeId" property="refereeId" />
+    <result column="refereeName" property="refereeName" />
+    <result column="fxlevel" property="fxlevel" />
+    <result column="joinTime" property="joinTime" />
+    <result column="money" property="money" />
+    <result column="yqcode" property="yqcode" />
+    <result column="byqcode" property="byqcode" />
+    <result column="isAdmin" property="isAdmin" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="modify_time" property="modifyTime" />
+  </resultMap>
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+ 
+  
+   <select id="select" resultMap="resultMap">
+  	select a.* from y23_user a
+  	where a.is_delete=0 
+  	order by create_time desc
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.* from y23_user a
+  	where a.is_delete=0 
+    and a.id = #{id}
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(1) budget from y23_user a
+  	where a.is_delete=0 
+  	
+  	<if test="nickName != null">
+  	and a.nickName like '%${nickName}%'
+  	</if>
+  	
+  	<if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  	
+  	<if test="phone != null">
+  	and a.phone like '%${phone}%'
+  	</if>
+  	
+  	<if test="openId != null">
+  	and a.openId = #{openId}
+  	</if>
+  	
+  	<if test="username != null">
+  	and a.username = #{username}
+  	</if>
+  	
+    <if test="pwd != null">
+  	and a.pwd = #{pwd}
+  	</if>
+  	
+  	<if test="fxname != null">
+  	and a.fxname like '%${fxname}%'
+  	</if>
+  	
+  	<if test="fxphone != null">
+  	and a.fxphone like '%${fxphone}%'
+  	</if>
+  	
+  	<if test="statuskey != null">
+  	and a.status in (${statuskey})
+  	</if>
+  	
+  	<if test="status != null">
+  	and a.status = #{status}
+  	</if>
+  	
+  	<if test="level == 1">
+  	and a.refereeId = #{refereeId}
+  	</if>
+  	<if test="level == 2">
+  	and a.refereeId in (select b.id from y23_user b where b.is_delete= 0 and b.refereeId=#{refereeId})
+  	</if>
+  	<if test="level == 3">
+  	and a.refereeId in (select b.id from y23_user b where b.is_delete= 0 and b.refereeId in (select c.id from y23_user c where c.is_delete= 0 and c.refereeId=#{refereeId}))
+  	</if>
+  	
+  	<if test="yqcode != null">
+    and a.yqcode = #{yqcode}
+    </if>
+    
+    <if test="byqcode != null">
+    and a.byqcode = #{byqcode}
+    </if>
+    
+    <if test="chlevel != null">
+    and a.id in (
+    	select id from (
+			select t1.id,
+				if(find_in_set(refereeId, @pids) > 0, @pids := concat(@pids, ',', id), 0) as ischild
+				from (
+				select id,refereeId from y23_user t order by refereeId, id
+				) t1,
+				(select @pids := #{rootId}) t2) t3 where ischild != 0
+    ),
+    </if>
+    
+    <if test="isAdmin != null">
+  	and a.isAdmin = #{isAdmin}
+  	</if>
+    
+    
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.* from y23_user a
+  	where a.is_delete=0 
+  	
+  	<if test="nickName != null">
+  	and a.nickName like '%${nickName}%'
+  	</if>
+  	
+  	<if test="name != null">
+  	and a.name like '%${name}%'
+  	</if>
+  	
+  	<if test="phone != null">
+  	and a.phone like '%${phone}%'
+  	</if>
+  	
+  	<if test="openId != null">
+  	and a.openId = #{openId}
+  	</if>
+  	
+  	<if test="username != null">
+  	and a.username = #{username}
+  	</if>
+  	
+    <if test="pwd != null">
+  	and a.pwd = #{pwd}
+  	</if>
+  	
+  	<if test="fxname != null">
+  	and a.fxname like '%${fxname}%'
+  	</if>
+  	
+  	<if test="fxphone != null">
+  	and a.fxphone like '%${fxphone}%'
+  	</if>
+  	
+  	<if test="statuskey != null">
+  	and a.status in (${statuskey})
+  	</if>
+  	
+  	<if test="status != null">
+  	and a.status = #{status}
+  	</if>
+  	
+  	<if test="level == 1">
+  	and a.refereeId = #{refereeId}
+  	</if>
+  	<if test="level == 2">
+  	and a.refereeId in (select b.id from y23_user b where b.is_delete= 0 and b.refereeId=#{refereeId})
+  	</if>
+  	<if test="level == 3">
+  	and a.refereeId in (select b.id from y23_user b where b.is_delete= 0 and b.refereeId in (select c.id from y23_user c where c.is_delete= 0 and c.refereeId=#{refereeId}))
+  	</if>
+  	
+  	<if test="yqcode != null">
+    and a.yqcode = #{yqcode}
+    </if>
+    
+    <if test="byqcode != null">
+    and a.byqcode = #{byqcode}
+    </if>
+    
+    <if test="chlevel != null">
+    and a.id in (
+    	select t3.id from (
+			select t1.id,
+				if(find_in_set(refereeId, @pids) > 0, @pids := concat(@pids, ',', id), 0) as ischild
+				from (
+				select id,refereeId from y23_user t order by refereeId, id
+				) t1,
+				(select @pids := #{rootId}) t2) t3 where t3.ischild != 0
+    )
+    </if>
+    <if test="sxlevel != null">
+    and a.id in (
+    	SELECT T1._id id
+			FROM (SELECT @r AS _id,
+				(SELECT @r := refereeId FROM y23_user WHERE id = _id) AS refereeId,
+				@l := @l + 1 AS lvl FROM (SELECT @r := #{childId}, @l := 0) vars,
+				y23_user h WHERE @r != '0') T1
+    )
+    </if>
+    
+    <if test="isAdmin != null">
+  	and a.isAdmin = #{isAdmin}
+  	</if>
+  	
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  	
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.lcm.entity.pojo.Y23User">
+    insert into y23_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="pwd != null">
+        pwd,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="cover != null">
+        cover,
+      </if>
+      <if test="nickName != null">
+        nickName,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="openId != null">
+        openId,
+      </if>
+      <if test="fxname != null">
+        fxname,
+      </if>
+      <if test="fxphone != null">
+        fxphone,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="refereeId != null">
+        refereeId,
+      </if>
+      <if test="refereeName != null">
+        refereeName,
+      </if>
+      <if test="fxlevel != null">
+        fxlevel,
+      </if>
+      <if test="joinTime != null">
+        joinTime,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="yqcode != null">
+        yqcode,
+      </if>
+      <if test="byqcode != null">
+	    byqcode,
+	  </if>
+	  <if test="isAdmin != null">
+	    isAdmin,
+	  </if>
+        is_delete,
+        create_time,
+        modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="username != null">
+        #{username},
+      </if>
+      <if test="pwd != null">
+        #{pwd},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="cover != null">
+        #{cover},
+      </if>
+      <if test="nickName != null">
+        #{nickName},
+      </if>
+      <if test="phone != null">
+        #{phone},
+      </if>
+      <if test="openId != null">
+        #{openId},
+      </if>
+      <if test="fxname != null">
+        #{fxname},
+      </if>
+      <if test="fxphone != null">
+        #{fxphone},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="refereeId != null">
+        #{refereeId},
+      </if>
+      <if test="refereeName != null">
+        #{refereeName},
+      </if>
+      <if test="fxlevel != null">
+        #{fxlevel},
+      </if>
+      <if test="joinTime != null">
+        #{joinTime},
+      </if>
+      <if test="money != null">
+        #{money},
+      </if>
+      <if test="yqcode != null">
+        #{yqcode},
+      </if>
+      <if test="byqcode != null">
+	    #{byqcode},
+	  </if>
+	  <if test="isAdmin != null">
+	    #{isAdmin},
+	  </if>
+        0,
+        now(),
+        now()
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23User">
+    update y23_user
+    <set>
+      <if test="username != null">
+        username = #{username},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="cover != null">
+        cover = #{cover},
+      </if>
+      <if test="nickName != null">
+        nickName = #{nickName},
+      </if>
+      <if test="phone != null">
+        phone = #{phone},
+      </if>
+      <if test="openId != null">
+        openId = #{openId},
+      </if>
+      <if test="fxname != null">
+        fxname = #{fxname},
+      </if>
+      <if test="fxphone != null">
+        fxphone = #{fxphone},
+      </if>
+      <if test="status != null and status != -1">
+        status = #{status},
+      </if>
+      <if test="status != null and status == -1">
+        status = null,
+      </if>
+      <if test="refereeId != null">
+        refereeId = #{refereeId},
+      </if>
+      <if test="refereeName != null">
+        refereeName = #{refereeName},
+      </if>
+      <if test="fxlevel != null">
+        fxlevel = #{fxlevel},
+      </if>
+      <if test="joinTime != null">
+        joinTime = #{joinTime},
+      </if>
+      <if test="money != null">
+       money = #{money},
+      </if>
+      <if test="yqcode != null">
+        yqcode = #{yqcode},
+      </if>
+      <if test="byqcode != null">
+	    byqcode = #{byqcode},
+	  </if>
+	  <if test="isAdmin != null">
+	    isAdmin = #{isAdmin},
+	  </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

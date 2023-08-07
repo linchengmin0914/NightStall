@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcm.dao.business.IY23PostageAreaDao">
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23PostageArea">
+    <id column="id" property="id" />
+    <result column="tempId" property="tempId" />
+    <result column="areas" property="areas" />
+    <result column="firstNum" property="firstNum" />
+    <result column="firstPrice" property="firstPrice" />
+    <result column="continueNum" property="continueNum" />
+    <result column="continuePrice" property="continuePrice" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="modify_time" property="modifyTime" />
+  </resultMap>
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+   <select id="select" resultMap="resultMap">
+  	select a.* from y23_postage_area a
+  	where a.is_delete=0 
+  	order by create_time desc
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.* from y23_postage_area a
+  	where a.is_delete=0 
+    and a.id = #{id}
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(1) budget from y23_postage_area a
+  	where a.is_delete=0 
+  	
+ 	 <if test="tempId != null">
+  	and a.tempId = #{tempId}
+  	</if>
+  	
+  	<if test="sourceType != null">
+  	and a.source_type = #{sourceType}
+  	</if>
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.* from y23_postage_area a
+  	where a.is_delete=0 
+  	
+  	<if test="tempId != null">
+  	and a.tempId = #{tempId}
+  	</if>
+  	<if test="startTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &gt;= #{startTime}
+  	</if>
+  	<if test="endTime != null">
+  	and date_format(a.create_time,'%Y-%m-%d') &lt;= #{endTime}
+  	</if>
+  	
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.lcm.entity.pojo.Y23PostageArea">
+    insert into y23_postage_area
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tempId != null">
+        tempId,
+      </if>
+      <if test="areas != null">
+        areas,
+      </if>
+      <if test="firstNum != null">
+        firstNum,
+      </if>
+      <if test="firstPrice != null">
+        firstPrice,
+      </if>
+      <if test="continueNum != null">
+        continueNum,
+      </if>
+      <if test="continuePrice != null">
+        continuePrice,
+      </if>
+        is_delete,
+        create_time,
+        modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="tempId != null">
+        #{tempId},
+      </if>
+      <if test="areas != null">
+        #{areas},
+      </if>
+      <if test="firstNum != null">
+        #{firstNum},
+      </if>
+      <if test="firstPrice != null">
+        #{firstPrice},
+      </if>
+      <if test="continueNum != null">
+        #{continueNum},
+      </if>
+      <if test="continuePrice != null">
+        #{continuePrice},
+      </if>
+        0,
+        now(),
+        now()
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23PostageArea">
+    update y23_postage_area
+    <set>
+      <if test="tempId != null">
+        tempId = #{tempId},
+      </if>
+      <if test="areas != null">
+        areas = #{areas},
+      </if>
+      <if test="firstNum != null">
+        firstNum = #{firstNum},
+      </if>
+      <if test="firstPrice != null">
+        firstPrice = #{firstPrice},
+      </if>
+      <if test="continueNum != null">
+        continueNum = #{continueNum},
+      </if>
+      <if test="continuePrice != null">
+        continuePrice = #{continuePrice},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

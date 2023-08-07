@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="xml"/>
+	<classpathentry kind="src" path="entity"/>
+	<classpathentry kind="src" path="dao"/>
+	<classpathentry kind="src" path="utils"/>
+	<classpathentry kind="src" path="service"/>
+	<classpathentry kind="src" path="controller"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.j2eedt.core.MYECLIPSE_JAVAEE_5_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lib"/>
+	<classpathentry kind="lib" path="D:/lib2/IJPay-1.1.3.jar"/>
+	<classpathentry kind="lib" path="D:/lib2/bcprov-jdk14-145.jar"/>
+	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
+</classpath>

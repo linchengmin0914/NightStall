@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IY23PropertyNameDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23PropertyName" >
+    <id column="id" property="id" />
+    <result column="title" property="title"/>
+    <result column="enTitle" property="enTitle"/>
+    <result column="cate_id" property="cateId" />
+    <result column="is_allow_alias" property="isAllowAlias" />
+    <result column="is_color" property="isColor"/>
+    <result column="is_enum" property="isEnum" />
+    <result column="is_input" property="isInput"/>
+    <result column="is_key" property="isKey" />
+    <result column="is_sale" property="isSale" />
+    <result column="is_search" property="isSearch" />
+    <result column="is_must" property="isMust" />
+    <result column="is_multi" property="isMulti"/>
+    <result column="sort" property="sort" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="modify_time" property="modifyTime"/>
+    
+     <result column="cateName" property="cateName"/>
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select * from y23_property_name where is_delete=0 
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from y23_property_name a 
+    left join y23_categories b on b.id = a.cate_id
+    where a.is_delete=0
+    <if test="title != null">
+  	and a.title like '%${title}%'
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.*,b.cate_name as cateName from y23_property_name a 
+  	left join y23_categories b on b.id = a.cate_id
+  	where a.is_delete=0
+  	<if test="title != null">
+  	and a.title like '%${title}%'
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select 
+    *
+    from y23_property_name
+    where  is_delete=0
+    and id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Y23PropertyName" useGeneratedKeys="true" keyProperty="id">
+    insert into y23_property_name
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="enTitle != null" >
+        enTitle,
+      </if>
+      <if test="cateId != null" >
+        cate_id,
+      </if>
+      <if test="isAllowAlias != null" >
+        is_allow_alias,
+      </if>
+      <if test="isColor != null" >
+        is_color,
+      </if>
+      <if test="isEnum != null" >
+        is_enum,
+      </if>
+      <if test="isInput != null" >
+        is_input,
+      </if>
+      <if test="isKey != null" >
+        is_key,
+      </if>
+      <if test="isSale != null" >
+        is_sale,
+      </if>
+      <if test="isSearch != null" >
+        is_search,
+      </if>
+      <if test="isMust != null" >
+        is_must,
+      </if>
+      <if test="isMulti != null" >
+        is_multi,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      is_delete,
+      create_time,
+      modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="title != null" >
+        #{title},
+      </if>
+      <if test="enTitle != null" >
+        #{enTitle},
+      </if>
+      <if test="cateId != null" >
+        #{cateId},
+      </if>
+      <if test="isAllowAlias != null" >
+        #{isAllowAlias},
+      </if>
+      <if test="isColor != null" >
+        #{isColor},
+      </if>
+      <if test="isEnum != null" >
+        #{isEnum},
+      </if>
+      <if test="isInput != null" >
+        #{isInput},
+      </if>
+      <if test="isKey != null" >
+        #{isKey},
+      </if>
+      <if test="isSale != null" >
+        #{isSale},
+      </if>
+      <if test="isSearch != null" >
+        #{isSearch},
+      </if>
+      <if test="isMust != null" >
+        #{isMust},
+      </if>
+      <if test="isMulti != null" >
+        #{isMulti},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="sort != null" >
+        #{sort},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23PropertyName" >
+    update y23_property_name
+    <set >
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="enTitle != null" >
+        enTitle = #{enTitle},
+      </if>
+      <if test="cateId != null" >
+        cate_id = #{cateId},
+      </if>
+      <if test="isAllowAlias != null" >
+        is_allow_alias = #{isAllowAlias},
+      </if>
+      <if test="isColor != null" >
+        is_color = #{isColor},
+      </if>
+      <if test="isEnum != null" >
+        is_enum = #{isEnum},
+      </if>
+      <if test="isInput != null" >
+        is_input = #{isInput},
+      </if>
+      <if test="isKey != null" >
+        is_key = #{isKey},
+      </if>
+      <if test="isSale != null" >
+        is_sale = #{isSale},
+      </if>
+      <if test="isSearch != null" >
+        is_search = #{isSearch},
+      </if>
+      <if test="isMust != null" >
+        is_must = #{isMust},
+      </if>
+      <if test="isMulti != null" >
+        is_multi = #{isMulti},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete},
+      </if>
+      modify_time = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

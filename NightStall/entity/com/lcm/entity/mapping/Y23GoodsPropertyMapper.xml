@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IY23GoodsPropertyDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23GoodsProperty" >
+    <id column="id" property="id" />
+    <result column="goods_id" property="goodsId" />
+    <result column="prop_name_id" property="propNameId" />
+    <result column="prop_value_id" property="propValueId" />
+    <result column="price" property="price" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="modify_time" property="modifyTime" />
+    
+    <result column="nameTitle" property="nameTitle" />
+    <result column="enNameTitle" property="enNameTitle" />
+    <result column="isColor" property="isColor" />
+    <result column="isKey" property="isKey" />
+    <result column="isSale" property="isSale" />
+    <result column="valueTitle" property="valueTitle" />
+    <result column="value" property="value" />
+    <result column="isMust" property="isMust" />
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select * from y23_goods_property where is_delete=0 
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(1) budget from y23_goods_property a 
+    left join y23_property_name b on b.id = a.prop_name_id
+    left join y23_property_value c on c.id = a.prop_value_id
+    where a.is_delete=0
+   <if test="goodsId != null">
+  	and a.goods_id = #{goodsId}
+  	</if>
+  	<if test="propNameId != null">
+  	and a.prop_name_id = #{propNameId}
+  	</if>
+  	<if test="propValueId != null">
+  	and a.prop_value_id = #{propValueId}
+  	</if>
+  	<if test="isKey != null">
+  	and b.is_key = #{isKey}
+  	</if>
+  	<if test="status != null">
+  	and b.status = #{status}
+  	</if>
+  	<if test="status != null">
+  	and c.status = #{status}
+  	</if>
+  	<if test="goodsIds != null">
+  	and a.goods_id in (${goodsIds})
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.*,
+  		b.title as nameTitle,b.enTitle as enNameTitle,b.is_color as isColor,b.is_key as isKey, b.is_sale as isSale,b.is_must as isMust,
+  		c.title as valueTitle,c.enTitle as enValueTitle,c.value as value
+  		from y23_goods_property a 
+  	left join y23_property_name b on b.id = a.prop_name_id
+    left join y23_property_value c on c.id = a.prop_value_id
+  	where a.is_delete=0
+  	<if test="goodsId != null">
+  	and a.goods_id = #{goodsId}
+  	</if>
+  	<if test="propNameId != null">
+  	and a.prop_name_id = #{propNameId}
+  	</if>
+  	<if test="propValueId != null">
+  	and a.prop_value_id = #{propValueId}
+  	</if>
+  	
+  	<if test="isKey != null">
+  	and b.is_key = #{isKey}
+  	</if>
+  	<if test="status != null">
+  	and b.status = #{status}
+  	</if>
+  	<if test="status != null">
+  	and c.status = #{status}
+  	</if>
+  	<if test="goodsIds != null">
+  	and a.goods_id in (${goodsIds})
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.*,
+  		b.title as nameTitle,b.enTitle as enNameTitle,b.is_color as isColor,b.is_key as isKey, b.is_sale as isSale,b.is_must as isMust,
+  		c.title as valueTitle,c.enTitle as enValueTitle,c.value as value
+  		from y23_goods_property a 
+  	left join y23_property_name b on b.id = a.prop_name_id
+    left join y23_property_value c on c.id = a.prop_value_id
+  	where a.is_delete=0
+    and a.id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Y23GoodsProperty" useGeneratedKeys="true" keyProperty="id">
+    insert into y23_goods_property
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="propNameId != null" >
+        prop_name_id,
+      </if>
+      <if test="propValueId != null" >
+        prop_value_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      is_delete,
+      create_time,
+      modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId},
+      </if>
+      <if test="propNameId != null" >
+         #{propNameId},
+      </if>
+      <if test="propValueId != null" >
+        #{propValueId},
+      </if>
+      <if test="price != null" >
+        #{price},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23GoodsProperty" >
+    update y23_goods_property
+    <set >
+      <if test="goodsId != null" >
+        goods_id = #{goodsId},
+      </if>
+      <if test="propNameId != null" >
+        prop_name_id = #{propNameId},
+      </if>
+      <if test="propValueId != null" >
+        prop_value_id = #{propValueId},
+      </if>
+      <if test="price != null" >
+        price = #{price},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete},
+      </if>
+      modify_time = now()
+    </set>
+    <if test="id != null">
+     where id = #{id}
+    </if>
+    <if test="goodsId != null">
+    where goods_id = #{goodsId}
+    </if>
+  </update>
+</mapper>

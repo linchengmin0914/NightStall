@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="NightStall"
+  id="myeclipse.1689162548697"
+  context-root="/NightStall"
+  j2ee-spec="5.0"
+  archive="NightStall.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

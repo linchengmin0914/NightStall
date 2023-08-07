@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IY23GoodsDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23Goods" >
+    <id column="id" property="id"/>
+    <result column="storeId" property="storeId" />
+    <result column="goods_name" property="goodsName" />
+    <result column="cover" property="cover"/>
+    <result column="long_cover" property="longCover"/>
+    <result column="brand_id" property="brandId"/>
+    <result column="cate_id" property="cateId"/>
+    <result column="price" property="price"/>
+    <result column="original" property="original"/>
+    <result column="tags" property="tags"/>
+    <result column="content" property="content"/>
+    <result column="summary" property="summary"/>
+    <result column="status" property="status"/>
+    <result column="is_sale" property="isSale"/>
+    <result column="is_index" property="isIndex"/>
+    <result column="saleNum" property="saleNum"/>
+    <result column="storeNum" property="storeNum"/>
+    <result column="brandName" property="brandName"/>
+    
+    <result column="enGoodName" property="enGoodName"/>
+    <result column="enCover" property="enCover"/>
+    <result column="enTags" property="enTags"/>
+    <result column="enContent" property="enContent"/>
+    <result column="enSummary" property="enSummary"/>
+    <result column="enBrandName" property="enBrandName"/>
+    <result column="storeName" property="storeName" />
+    
+    <result column="is_delete" property="isDelete"/>
+    <result column="is_zhdz" property="isZhdz"/>
+    <result column="weight" property="weight"/>
+    <result column="create_time" property="createTime"/>
+    <result column="modify_time" property="modifyTime"/>
+    <result column="unit" property="unit"/>
+    
+    <result column="cate_name" property="cateName"/>
+    <result column="en_cate_name" property="enCateName"/>
+    <result column="postageIds" property="postageIds"/>
+    
+    <result column="commission" property="commission"/>
+    <result column="fxstatus" property="fxstatus"/>
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select a.*,b.cate_name,b.en_cate_name,c.name as storeName  from y23_goods a 
+  	left join y23_categories b on a.cate_id=b.id
+  	left join y23_store c on c.id=a.storeId
+  	where a.is_delete=0
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from y23_goods a where a.is_delete=0
+    <if test="goodsName != null">
+  	and a.goods_name like '%${goodsName}%'
+  	</if>
+  	<if test="key != null">
+  	and (a.tags like '%${key}%' or a.goods_name like '%${key}%') 
+  	</if>
+  	<if test="cateIds != null">
+  	and a.cate_id in (${cateIds})
+  	</if>
+  	<if test="startPrice != null">
+  	and a.price &gt;= #{startPrice}
+  	</if>
+  	<if test="endPrice != null">
+  	and a.price &lt;= #{endPrice}
+  	</if>
+  	<if test="cateId != null">
+  	and a.cate_id = #{cateId}
+  	</if>
+  	<if test="isIndex != null">
+  	and a.is_index = #{isIndex}
+  	</if>
+  	<if test="isZhdz != null">
+  	and a.is_zhdz = #{isZhdz}
+  	</if>
+  	<if test="isSale != null">
+  	and a.is_sale = #{isSale}
+  	</if>
+  	<if test="fxstatus != null">
+  	and a.fxstatus = #{fxstatus}
+  	</if>
+  	<if test="storeId != null">
+  	and a.storeId = #{storeId}
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.*,b.cate_name,b.en_cate_name,c.name as storeName  from y23_goods a 
+  	left join y23_categories b on a.cate_id=b.id
+  	left join y23_store c on c.id=a.storeId
+  	where a.is_delete=0
+  	<if test="goodsName != null">
+  	and a.goods_name like '%${goodsName}%'
+  	</if>
+  	<if test="key != null">
+  	and (a.tags like '%${key}%' or a.goods_name like '%${key}%' or a.enGoodName like '%${key}%' or a.enTags like '%${key}%') 
+  	</if>
+  	<if test="cateIds != null">
+  	and a.cate_id in (${cateIds})
+  	</if>
+  	<if test="startPrice != null">
+  	and a.price &gt;= #{startPrice}
+  	</if>
+  	<if test="endPrice != null">
+  	and a.price &lt;= #{endPrice}
+  	</if>
+  	<if test="cateId != null">
+  	and a.cate_id = #{cateId}
+  	</if>
+  	<if test="isIndex != null">
+  	and a.is_index = #{isIndex}
+  	</if>
+  	<if test="isZhdz != null">
+  	and a.is_zhdz = #{isZhdz}
+  	</if>
+  	<if test="isSale != null">
+  	and a.is_sale = #{isSale}
+  	</if>
+  	<if test="fxstatus != null">
+  	and a.fxstatus = #{fxstatus}
+  	</if>
+  	<if test="storeId != null">
+  	and a.storeId = #{storeId}
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select a.*,b.cate_name,b.en_cate_name,c.name as storeName  from y23_goods a 
+  	left join y23_categories b on a.cate_id=b.id
+  	left join y23_store c on c.id=a.storeId
+  	where a.is_delete=0
+    and a.id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Y23Goods" useGeneratedKeys="true" keyProperty="id">
+    insert into y23_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="cover != null" >
+        cover,
+      </if>
+      <if test="longCover != null" >
+        long_cover,
+      </if>
+      <if test="brandId != null" >
+        brand_id,
+      </if>
+      <if test="cateId != null" >
+        cate_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="original != null" >
+        original,
+      </if>
+      <if test="tags != null" >
+        tags,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="summary != null" >
+        summary,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isIndex != null">
+  		is_index,
+  	  </if>
+      <if test="isSale != null" >
+        is_sale,
+      </if>
+      <if test="isZhdz != null">
+	  	is_zhdz,
+	  </if>
+	  <if test="saleNum != null">
+	  	saleNum,
+	  </if>
+	  <if test="storeNum != null">
+	  	storeNum,
+	  </if>
+	  <if test="brandName != null">
+	  	brandName,
+	  </if>
+	  <if test="enGoodName != null">
+	  	enGoodName,
+	  </if>
+	  <if test="enCover != null">
+	  	enCover,
+	  </if>
+	  <if test="enTags != null">
+	  	enTags,
+	  </if>
+	  <if test="enContent != null">
+	  	enContent,
+	  </if>
+	  <if test="enSummary != null">
+	  	enSummary,
+	  </if>
+	  <if test="enBrandName != null">
+	  	enBrandName,
+	  </if>
+	  <if test="postageIds != null">
+	  	postageIds,
+	  </if>
+	  <if test="commission != null">
+	  	commission,
+	  </if>
+	  <if test="fxstatus != null">
+	  	fxstatus,
+	  </if>
+	  <if test="weight != null">
+	  	weight,
+	  </if>
+	  <if test="storeId != null">
+	  	storeId,
+	  </if>
+	  <if test="unit != null">
+	  	unit,
+	  </if>
+      is_delete,
+      create_time,
+      modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName},
+      </if>
+      <if test="cover != null" >
+        #{cover},
+      </if>
+      <if test="longCover != null" >
+        #{longCover},
+      </if>
+      <if test="brandId != null" >
+        #{brandId},
+      </if>
+      <if test="cateId != null" >
+        #{cateId},
+      </if>
+      <if test="price != null" >
+        #{price},
+      </if>
+      <if test="original != null" >
+        #{original},
+      </if>
+      <if test="tags != null" >
+        #{tags},
+      </if>
+      <if test="content != null" >
+        #{content},
+      </if>
+      <if test="summary != null" >
+        #{summary},
+      </if>
+      <if test="status != null" >
+        #{status},
+      </if>
+      <if test="isIndex != null">
+  		#{isIndex},
+  	  </if>
+      <if test="isSale != null" >
+        #{isSale},
+      </if>
+      <if test="isZhdz != null">
+	  	#{isZhdz},
+	  </if>
+	  <if test="saleNum != null">
+	  	#{saleNum},
+	  </if>
+	  <if test="storeNum != null">
+	  	#{storeNum},
+	  </if>
+	  <if test="brandName != null">
+	  	#{brandName},
+	  </if>
+	  <if test="enGoodName != null">
+	  	#{enGoodName},
+	  </if>
+	  <if test="enCover != null">
+	  	#{enCover},
+	  </if>
+	  <if test="enTags != null">
+	  	#{enTags},
+	  </if>
+	  <if test="enContent != null">
+	  	#{enContent},
+	  </if>
+	  <if test="enSummary != null">
+	  	#{enSummary},
+	  </if>
+	  <if test="enBrandName != null">
+	  	#{enBrandName},
+	  </if>
+	  <if test="postageIds != null">
+	  	#{postageIds},
+	  </if>
+	  <if test="commission != null">
+	  	#{commission},
+	  </if>
+	  <if test="fxstatus != null">
+	  	#{fxstatus},
+	  </if>
+	  <if test="weight != null">
+	  	#{weight},
+	  </if>
+	  <if test="storeId != null">
+	  	#{storeId},
+	  </if>
+	  <if test="unit != null">
+	  	#{unit},
+	  </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23Goods" >
+    update y23_goods
+    <set >
+      <if test="goodsName != null" >
+        goods_name = #{goodsName},
+      </if>
+      <if test="cover != null" >
+        cover = #{cover},
+      </if>
+      <if test="longCover != null" >
+        long_cover = #{longCover},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId},
+      </if>
+      <if test="cateId != null" >
+        cate_id = #{cateId},
+      </if>
+      <if test="price != null" >
+        price = #{price},
+      </if>
+      <if test="original != null" >
+        original = #{original},
+      </if>
+      <if test="tags != null" >
+        tags = #{tags},
+      </if>
+      <if test="content != null" >
+        content = #{content},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary},
+      </if>
+      <if test="status != null" >
+        status = #{status},
+      </if>
+      <if test="isIndex != null" >
+        is_index = #{isIndex},
+      </if>
+      <if test="isSale != null" >
+        is_sale = #{isSale},
+      </if>
+      <if test="isZhdz != null">
+	  	is_zhdz = #{isZhdz},
+	  </if>
+	  <if test="saleNum != null">
+	  	saleNum = #{saleNum},
+	  </if>
+	  <if test="storeNum != null">
+	  	storeNum = #{storeNum},
+	  </if>
+	  <if test="brandName != null">
+	  	brandName = #{brandName},
+	  </if>
+	  <if test="enGoodName != null">
+	  	enGoodName = #{enGoodName},
+	  </if>
+	  <if test="enCover != null">
+	  	enCover = #{enCover},
+	  </if>
+	  <if test="enTags != null">
+	  	enTags = #{enTags},
+	  </if>
+	  <if test="enContent != null">
+	  	enContent = #{enContent},
+	  </if>
+	  <if test="enSummary != null">
+	  	enSummary = #{enSummary},
+	  </if>
+	  <if test="enBrandName != null">
+	  	enBrandName = #{enBrandName},
+	  </if>
+	  <if test="postageIds != null">
+	  	postageIds = #{postageIds},
+	  </if>
+	  <if test="commission != null">
+	  	commission = #{commission},
+	  </if>
+	  <if test="fxstatus != null">
+	  	fxstatus = #{fxstatus},
+	  </if>
+	  <if test="weight != null">
+	  	weight = #{weight},
+	  </if>
+	  <if test="storeId != null">
+	  	storeId = #{storeId},
+	  </if>
+	  <if test="unit != null">
+	  	unit = #{unit},
+	  </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete},
+      </if>
+      modify_time = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

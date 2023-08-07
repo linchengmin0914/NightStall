@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IY23BrandDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23Brand" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select * from y23_brand where is_delete=0 
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from y23_brand a where a.is_delete=0
+    <if test="brandName != null">
+  	and a.brand_name like '%${brandName}%'
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select * from y23_brand a where a.is_delete=0
+  	<if test="brandName != null">
+  	and a.brand_name like '%${brandName}%'
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select 
+    *
+    from y23_brand
+    where  is_delete=0
+    and id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Y23Brand" useGeneratedKeys="true" keyProperty="id">
+    insert into y23_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="desc != null" >
+        desc,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      is_delete,
+      create_time,
+      modify_time
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="brandName != null" >
+        #{brandName},
+      </if>
+      <if test="desc != null" >
+        #{desc},
+      </if>
+      <if test="sort != null" >
+        #{sort},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23Brand" >
+    update y23_brand
+    <set >
+      <if test="brandName != null" >
+        brand_name = #{brandName},
+      </if>
+      <if test="desc != null" >
+        desc = #{desc},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete},
+      </if>
+      modify_time = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

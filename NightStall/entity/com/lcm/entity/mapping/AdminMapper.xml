@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IAdminDao" >
+  <resultMap id="AdminMap" type="com.lcm.entity.pojo.Admin" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="passwd" property="passwd" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="phoneno" property="phoneno" jdbcType="VARCHAR" />
+    <result column="isDelete" property="isDelete" jdbcType="BIT" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modifyTime" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="ewm" property="ewm" jdbcType="VARCHAR" />
+    
+      <result column="type" property="type" jdbcType="INTEGER" />
+      <result column="storeId" property="storeId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="AdminMap">
+  	select * from t_admin where isDelete=0 
+  </select>
+  
+   <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from t_admin a where a.isDelete=0
+    <if test="name != null">
+  	and a.nickname like '%${name}%'
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="AdminMap">
+  	select * from t_admin a where a.isDelete=0
+  	<if test="nickname != null">
+  	and a.nickname = #{nickname}
+  	</if>
+  	<if test="name != null">
+  	and a.nickname like '%${name}%'
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+  <select id="selectPk" resultMap="AdminMap" parameterType="java.lang.Long" >
+    select 
+    *
+    from t_admin
+    where  isDelete=0
+    and id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Admin" >
+    insert into t_admin
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="passwd != null" >
+        passwd,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="phoneno != null" >
+        phoneno,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="ewm != null" >
+        ewm,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="storeId != null" >
+        storeId,
+      </if>
+      isDelete,
+      createTime,
+      modifyTime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="passwd != null" >
+        #{passwd},
+      </if>
+      <if test="nickname != null" >
+        #{nickname},
+      </if>
+      <if test="phoneno != null" >
+        #{phoneno},
+      </if>
+      <if test="roleId != null" >
+        #{roleId},
+      </if>
+      <if test="ewm != null" >
+        #{ewm},
+      </if>
+       <if test="type != null" >
+        #{type},
+      </if>
+      <if test="storeId != null" >
+        #{storeId},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+   <update id="update" parameterType="com.lcm.entity.pojo.Admin" >
+    update t_admin
+    <set >
+      <if test="passwd != null" >
+        passwd = #{passwd},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname},
+      </if>
+      <if test="phoneno != null" >
+        phoneno = #{phoneno},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId},
+      </if>
+      <if test="isDelete != null" >
+        isDelete = #{isDelete},
+      </if>
+      <if test="ewm != null" >
+        ewm = #{ewm},
+      </if>
+      <if test="type != null" >
+        type = #{type},
+      </if>
+      <if test="storeId != null" >
+        storeId = #{storeId},
+      </if>
+      modifyTime = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

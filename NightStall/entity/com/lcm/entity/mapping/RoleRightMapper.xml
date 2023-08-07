@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IRoleRightDao" >
+  <resultMap id="RoleRightMap" type="com.lcm.entity.pojo.RoleRight" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="right_id" property="rightId" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <select id="selectParam" resultMap="RoleRightMap">
+  	select * from t_role_right where 1=1
+  	<if test="roleId != null">
+  	and role_id = #{roleId}
+  	</if>
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.RoleRight" >
+    insert into t_role_right
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="rightId != null" >
+        right_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="roleId != null" >
+        #{roleId},
+      </if>
+      <if test="rightId != null" >
+        #{rightId},
+      </if>
+    </trim>
+  </insert>
+  
+  <delete id="deleteParam" parameterType="java.lang.Long" >
+    delete from t_role_right
+    where role_id = #{roleId}
+  </delete>
+  
+</mapper>

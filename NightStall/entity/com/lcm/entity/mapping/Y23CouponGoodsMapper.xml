@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcm.dao.business.IY23CouponGoodsDao" >
+  <resultMap id="resultMap" type="com.lcm.entity.pojo.Y23CouponGoods" >
+    <id column="id" property="id" />
+    <result column="couponId" property="couponId" />
+    <result column="goodsId" property="goodsId" />
+    <result column="isDelete" property="isDelete" />
+    <result column="createTime" property="createTime" />
+    <result column="modifyTime" property="modifyTime"/>
+  </resultMap>
+  
+  <resultMap id="ResultOfInteger" type="java.lang.Integer">  
+    <result column="budget" property="budget" jdbcType="INTEGER" />  
+  </resultMap> 
+  
+  <select id="select" resultMap="resultMap">
+  	select * from y23_coupon_goods where isDelete=0 
+  </select>
+  
+  <select id="countParam" resultMap="ResultOfInteger">
+    select count(*) budget from y23_coupon_goods a where a.isDelete=0
+   <if test="couponId != null">
+  	and a.couponId = #{couponId}
+  	</if>
+  	<if test="goodsId != null">
+  	and a.goodsId = #{goodsId}
+  	</if>
+  </select>
+  
+  <select id="selectParam" resultMap="resultMap">
+  	select a.* from y23_coupon_goods a 
+  	where a.isDelete=0
+  	<if test="couponId != null">
+  	and a.couponId = #{couponId}
+  	</if>
+  	<if test="goodsId != null">
+  	and a.goodsId = #{goodsId}
+  	</if>
+  	<if test="orderBy != null">
+  	order by ${orderBy}
+  	</if>
+  	<if test="page != null">
+  	limit #{page}, #{pageSize}
+  	</if>
+  </select>
+  
+   <select id="selectPk" resultMap="resultMap" parameterType="java.lang.Long" >
+    select 
+    *
+    from y23_coupon_goods
+    where  isDelete=0
+    and id = #{id}
+  </select>
+  
+  <insert id="insert" parameterType="com.lcm.entity.pojo.Y23CouponGoods" useGeneratedKeys="true" keyProperty="id">
+    insert into y23_coupon_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="couponId != null" >
+        couponId,
+      </if>
+      <if test="goodsId != null" >
+        goodsId,
+      </if>
+      isDelete,
+      createTime,
+      modifyTime
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="couponId != null" >
+        #{couponId},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId},
+      </if>
+      0,
+      now(),
+      now()
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.lcm.entity.pojo.Y23CouponGoods" >
+    update y23_coupon_goods
+    <set >
+      <if test="couponId != null" >
+        couponId = #{couponId},
+      </if>
+      <if test="goodsId != null" >
+        goodsId = #{goodsId},
+      </if>
+      <if test="isDelete != null" >
+        isDelete = #{isDelete},
+      </if>
+      modifyTime = now()
+    </set>
+    where id = #{id}
+  </update>
+</mapper>
